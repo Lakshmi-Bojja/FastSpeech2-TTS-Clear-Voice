@@ -14,27 +14,47 @@ def is_telugu_script(t):
     return any('\u0c00' <= c <= '\u0c7f' for c in t)
 
 def translate_any_english_to_telugu(txt):
+    # Try 1: MyMemory - BEST for Streamlit, free, no block
+    try:
+        import urllib.parse, json, urllib.request
+        q = urllib.parse.quote(txt)
+        url = "https://api.mymemory.translated.net/get?q=" + q + "&langpair=en|te"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read().decode("utf-8"))
+        out = data["responseData"]["translatedText"]
+        if out and is_telugu_script(out):
+            return out, "MyMemory"
+    except Exception as e:
+        err1 = str(e)
+    # Try 2: Google gtx
+    try:
+        import urllib.parse, json, urllib.request
+        q = urllib.parse.quote(txt)
+        url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=te&dt=t&q=" + q
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read().decode("utf-8"))
+        out = "".join([x[0] for x in data[0] if x[0]])
+        if out and is_telugu_script(out):
+            return out, "Google-gtx"
+    except Exception as e:
+        err2 = str(e)
+    # Try 3: deep translator
     try:
         dt = importlib.import_module('deep_trans' + 'lator')
         out = dt.GoogleTranslator(source='en', target='te').translate(txt)
-        if out and len(out.strip()) > 0:
-            return out
-    except Exception:
-        pass
-    try:
-        dt = importlib.import_module('deep_trans' + 'lator')
-        out = dt.MyMemoryTranslator(source='en', target='te').translate(txt)
-        if out and len(out.strip()) > 0:
-            return out
-    except Exception:
-        pass
-    return txt
+        if out and is_telugu_script(out):
+            return out, "deep-translator"
+    except Exception as e:
+        err3 = str(e)
+    return txt, "FAILED - no translator worked"
 
 def prepare_telugu_text(txt):
     if is_telugu_script(txt):
         return txt, "Telugu script - No translation needed"
-    te = translate_any_english_to_telugu(txt)
-    return te, f"Translated to Telugu: {te}"
+    te, mode = translate_any_english_to_telugu(txt)
+    return te, f"Translated [{mode}]: {te}"
 
 def generate_audio(txt, lang):
     display = txt
