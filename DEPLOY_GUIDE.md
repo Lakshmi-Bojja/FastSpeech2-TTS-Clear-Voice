@@ -1,0 +1,1 @@
+Upload ALL files inside project/ folder to GitHub repo FastSpeech2-TTS-English-Telugu. Do NOT upload ZIP itself. Extract first, then drag files.

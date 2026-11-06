@@ -1,0 +1,17 @@
+
+path:
+  dataset: "IndicTTS Telugu"
+  ckpt_path: "./checkpoints/"
+  log_path: "../Results/Telugu/"
+preprocessing:
+  sampling_rate: 22050
+  n_mel: 80
+  keep_telugu_unicode: true
+model:
+  encoder_layer: 4
+  decoder_layer: 6
+  hidden: 256
+train:
+  batch_size: 12
+  lr: 0.00008
+  epochs: 1200

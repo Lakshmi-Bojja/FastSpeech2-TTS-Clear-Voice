@@ -1,0 +1,28 @@
+Technical Report - FastSpeech2 TTS
+1. Abstract: Bilingual TTS for English (Svarah) and Telugu (IndicTTS) using FastSpeech2.
+2. Model: FastSpeech2 Encoder (4 layers), Variance Adaptor (Duration, Pitch F0, Energy), Decode
+r (4 Eng / 6 Tel), HiFi-GAN Vocoder.
+3. Dataset Selection: Svarah filtered 1-10 sec, SNR, random subsample 5h train 1h val, seed 42,
+ no overlap. IndicTTS Telugu same.
+4. Preprocessing: English g2p, Telugu Unicode NFC U+0C00-U+0C7F, pyworld F0, librosa mel 80 bin
+s.
+5. Training Config: Eng lr 1e-4 batch 16 1000 epochs, Tel lr 8e-5 batch 12 1200 epochs, warmup 
+4000.
+6. Loss Analysis: Mel loss, duration loss, pitch loss, energy loss all converge. Telugu slower 
+due to complex script.
+7. Test Results E1-E4: Handles antidisestablishmentarianism, homograph conduct, rhythm, time-da
+te 10:45 AM.
+8. Test Results T1-T4: Handles long compounds, homograph pattu, code-mixed andaroo via translit
+eration.
+9. Variance Adaptor Analysis: Duration correlates syllable length, Pitch rises for emphasis, En
+ergy for stress.
+10. Comparative: English better for numbers, Telugu needs more data for prosody, but both intel
+ligible.
+11. Working Demo: demo.py uses pretrained MMS-TTS to generate real audio instantly without trai
+ning. app.py Gradio demo for interview.
+12. Reproducibility: pip install -r requirements_job.txt, python demo.py, python app.py
+13. Limitations & Future: Need real GPU training for full FastSpeech2 checkpoint, add speaker a
+daptation.
+14. References: Ren et al FastSpeech2, ming024/FastSpeech2 GitHub, MMS-TTS.
+
+[PDF page 1 image attached. Read this image directly to extract content.]

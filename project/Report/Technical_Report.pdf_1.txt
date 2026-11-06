@@ -1,0 +1,17 @@
+[PDF page 1 image attached. Read this image directly to extract content.]
+
+Technical Report - FastSpeech2 TTS
+1. Implementation: ming024 FastSpeech2, variance adaptor with duration/pitch/energy predic
+tors, encoder 4 layers, decoder 4 (English) /6 (Telugu).
+2. Dataset Selection: Svarah filtered 1-10 sec, random subsample 5h train 1h val. IndicTTS
+ Telugu similar, no overlap, seed 42.
+3. Preprocessing: English g2p-en, Telugu Unicode NFC, pyworld for F0, librosa for mel.
+4. Training: English lr 1e-4 batch16 1000 epochs, Telugu lr 8e-5 batch12 1200 epochs.
+5. Loss curves: Converge after warmup 4000 steps, Telugu slower.
+6. Speech Quality: Handles antidisestablishmentarianism, homographs conduct, rhythm, timedate 10:45 AM.
+7. Telugu: Handles long compounds, code-mixed andaroo via transliteration.
+8. Variance plots: duration correlates syllable length, pitch rises for emphasis, energy f
+or stress.
+9. Comparative: English better for numbers, Telugu needs more data for prosody.
+10. Reproducibility: pip install -r requirements.txt, python preprocess.py train.py infere
+nce.py

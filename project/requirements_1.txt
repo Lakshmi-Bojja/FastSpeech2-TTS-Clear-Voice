@@ -1,0 +1,9 @@
+torch
+torchaudio
+librosa
+pyworld
+matplotlib
+PyYAML
+g2p-en
+Unidecode
+tqdm

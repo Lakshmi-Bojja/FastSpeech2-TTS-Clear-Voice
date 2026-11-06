@@ -1,0 +1,16 @@
+
+path:
+  dataset: "Svarah"
+  ckpt_path: "./checkpoints/"
+  log_path: "../Results/English/"
+preprocessing:
+  sampling_rate: 22050
+  n_mel: 80
+model:
+  encoder_layer: 4
+  decoder_layer: 4
+  hidden: 256
+train:
+  batch_size: 16
+  lr: 0.0001
+  epochs: 1000
