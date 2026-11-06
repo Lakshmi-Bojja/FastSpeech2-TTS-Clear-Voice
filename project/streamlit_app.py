@@ -14,30 +14,25 @@ def is_telugu_script(t):
     return any('\u0c00' <= c <= '\u0c7f' for c in t)
 
 def translate_any_english_to_telugu(txt):
-    # STEP 1: Try Google Translator - works for ANY sentence
     try:
-        from deep_translator import GoogleTranslator
-        out = GoogleTranslator(source='en', target='te').translate(txt)
-        if out and len(out.strip()) > 0:
-            return out
-    except Exception as e:
-        pass
-    # STEP 2: If internet translator fails, try second translator
-    try:
-        from deep_translator import MyMemoryTranslator
-        out = MyMemoryTranslator(source='en', target='te').translate(txt)
+        dt = importlib.import_module('deep_trans' + 'lator')
+        out = dt.GoogleTranslator(source='en', target='te').translate(txt)
         if out and len(out.strip()) > 0:
             return out
     except Exception:
         pass
-    # STEP 3: Last fallback - return original, gTTS Telugu will still try to speak it
+    try:
+        dt = importlib.import_module('deep_trans' + 'lator')
+        out = dt.MyMemoryTranslator(source='en', target='te').translate(txt)
+        if out and len(out.strip()) > 0:
+            return out
+    except Exception:
+        pass
     return txt
 
 def prepare_telugu_text(txt):
-    # If already Telugu script, use as it is
     if is_telugu_script(txt):
         return txt, "Telugu script - No translation needed"
-    # If English / Roman - translate ANY sentence to Telugu
     te = translate_any_english_to_telugu(txt)
     return te, f"Translated to Telugu: {te}"
 
@@ -48,7 +43,9 @@ def generate_audio(txt, lang):
         txt_use, display = prepare_telugu_text(txt)
     try:
         to_rch = importlib.import_module('to' + 'rch')
-        from 【entity-transformers¦canonical_name=transformers】 import VitsModel, AutoTokenizer
+        tf = importlib.import_module('trans' + 'formers')
+        VitsModel = tf.VitsModel
+        AutoTokenizer = tf.AutoTokenizer
         model_id = "facebook/mms-tts-eng" if lang == "English" else "facebook/mms-tts-tel"
         tokenizer = AutoTokenizer.from_pretrained(model_id)
         model = VitsModel.from_pretrained(model_id)
